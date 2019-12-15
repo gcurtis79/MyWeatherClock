@@ -4,7 +4,6 @@
 #include <Fonts/Tiny3x3a2pt7b.h>
 
 Ticker display_ticker;
-Ticker display_seconds;
 
 int prevDisplay = 0; // when the digital clock was displayed
 
@@ -63,10 +62,6 @@ uint16_t myBLACK = display.color565(0, 0, 0);
 
 uint16_t myCOLORS[8] = {myRED, myGREEN, myBLUE, myWHITE, myYELLOW, myCYAN, myMAGENTA, myBLACK};
 
-// ISR for display refresh
-int brightness = 2500;
-int dimm = 0;
-
 int countOnes(int num)
 {
   int count = 0;
@@ -95,10 +90,6 @@ int intLength(int number)
 void display_updater()
 {
   display.display(40);
-}
-
-int do_num(int num)
-{
 }
 
 void drawDate()
@@ -140,21 +131,17 @@ void display_time()
 {
   if (timeStatus() > 0)
   {
-    if (second() != prevDisplay)
-    { //update the display only if time has changed
-      display.clearDisplay();
-      display.setTextWrap(false);
-      prevDisplay = second();
-      drawWeather();
-      drawDate();
-      drawTime();
-    }
+    display.clearDisplay();
+    display.setTextWrap(false);
+    prevDisplay = second();
+    drawWeather();
+    drawDate();
+    drawTime();
   }
 }
 
 void display_IP()
 {
-  display.clearDisplay();
   display.setFont(&Picopixel);
   display.setCursor(0, 4);
   display.setTextColor(myCOLOR.red(BRIGHT));
@@ -172,21 +159,19 @@ void display_IP()
   display.print(".");
   display.setTextColor(myCOLOR.blue(BRIGHT));
   display.print(ip[3]);
-  display.display(40);
 }
 
 void matrix_init()
 {
   display.begin();
-  display_IP();
-  display_ticker.attach(0.002, display_updater);
-  display_seconds.attach(1, display_time);
   display.setFont(&Picopixel);
-  yield();
-  delay(1000);
+  display.setTextWrap(false);
+  display_ticker.attach(0.002, display_updater);
+  display.setFont(&Picopixel);
 }
 
 void matrix_loop()
 {
-  //display_updater();
+  if (second() != prevDisplay)
+    display_time();
 }

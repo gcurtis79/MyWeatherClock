@@ -5,9 +5,11 @@
 #include "Matrix.h"
 #include "Weather.h"
 #include "OTA.h"
+#include "Plasma.h"
 #include "button.h"
 
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   delay(100);
   Serial.println("");
@@ -19,11 +21,28 @@ void setup() {
   button_init();
 }
 
-void loop() {
+void loop()
+{
   wifi_loop();
   ezNTP_loop();
-  matrix_loop();
-  weather_loop();
   ota_loop();
   button_loop();
+
+  switch (display_mode)
+  {
+  case 0:
+    matrix_loop();
+    weather_loop();
+    break;
+  case 1:
+    display_IP();
+    delay(100);
+    break;
+  case 2:
+    plasma_loop();
+    break;
+  default:
+    display_mode = 0;
+    break;
+  }
 }

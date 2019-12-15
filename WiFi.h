@@ -1,5 +1,6 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WiFiMulti.h>
+#include <ESP8266mDNS.h>
 
 ESP8266WiFiMulti wifiMulti;
 
@@ -24,6 +25,8 @@ void wifi_init()
   Serial.println(WiFi.localIP());
 
   ip = WiFi.localIP();
+
+  MDNS.begin(OTA_NAME);
 }
 
 void wifi_loop()

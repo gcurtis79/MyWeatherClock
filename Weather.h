@@ -1,6 +1,6 @@
 #include <ArduinoJson.h>
 
-DynamicJsonDocument doc(800);
+DynamicJsonDocument doc(1024);
 
 // Array that keeps low/high temperatures and icons for two days
 int temp_now;
